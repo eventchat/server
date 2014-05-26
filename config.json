@@ -1,0 +1,10 @@
+{
+  "db": {
+    "test": {
+      "path": "mongodb://localhost/eventchat-test"
+    },
+    "prod": {
+      "path": "mongodb://localhost/eventchat"
+    }
+  }
+}
