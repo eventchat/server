@@ -1,6 +1,9 @@
 TEST_TIMEOUT = 2000
 TEST_REPORTER = spec
 
+dep:
+	@npm install -d .
+
 server:
 	@node app/app.js
 
@@ -15,4 +18,4 @@ test:
 			--bail \
 			test
 
-.PHONY: server test
+.PHONY: dep server test
