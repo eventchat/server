@@ -1,6 +1,9 @@
 TEST_TIMEOUT = 2000
 TEST_REPORTER = spec
 
+server:
+	@node app/app.js
+
 test:
 	@NODE_ENV=test \
 		./node_modules/.bin/mocha \
@@ -12,4 +15,4 @@ test:
 			--bail \
 			test
 
-.PHONY: test
+.PHONY: server test
