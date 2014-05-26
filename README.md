@@ -1,9 +1,10 @@
 EventChat Server
 ================
 
+[![Build Status](https://travis-ci.org/eventchat/server.svg?branch=master)](https://travis-ci.org/eventchat/server)
+
 This repository contains the source code for the EventChat App.
 
-[![Build Status](https://travis-ci.org/eventchat/server.svg?branch=master)](https://travis-ci.org/eventchat/server)
 
 
 Dependencies
