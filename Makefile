@@ -1,11 +1,11 @@
-TEST_TIMEOUT = 2000
+TEST_TIMEOUT = 5000
 TEST_REPORTER = spec
 
 dep:
 	@npm install -d .
 
 server:
-	@node app/app.js
+	@node server.js
 
 test:
 	@NODE_ENV=test \
