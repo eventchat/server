@@ -61,6 +61,26 @@ describe('User API', function () {
   });
 
   describe('POST /users', function () {
-  
+    it('should respond with 200 when successfully created the user', function (done) {
+      request(app)
+        .post('/users')
+        .send({
+          name: 'Lyman',
+          password: '12345',
+          email: 'lyman@example.com'
+        })
+        .expect(200)
+        .end(done);
+    });
+
+    it('should respond with 400 when the submitted data is invalid', function (done) {
+      request(app)
+        .post('/users')
+        .send({
+          name: 'Lyman'
+        })
+        .expect(400)
+        .end(done);
+    });
   });
 });
