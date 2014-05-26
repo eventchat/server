@@ -1,4 +1,6 @@
-var express = require('express');
+var express  = require('express');
+var mongoose = require('mongoose');
+var echo     = require('./controllers/echo');
 
 var app = express();
 
@@ -13,9 +15,7 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.post('/echo', function (req, res) {
-  res.send(req.body);
-});
+app.post('/echo', echo.show);
 
 module.exports = app;
 
