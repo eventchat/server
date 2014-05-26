@@ -1,6 +1,7 @@
 var express  = require('express');
 var mongoose = require('mongoose');
 var echo     = require('./controllers/echo');
+var users    = require('./controllers/users');
 
 var app = express();
 
@@ -16,6 +17,7 @@ if ('development' === app.get('env')) {
 }
 
 app.post('/echo', echo.show);
+app.get('/users/:id', users.show);
 
 module.exports = app;
 
