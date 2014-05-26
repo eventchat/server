@@ -22,6 +22,7 @@ if ('development' === app.get('env')) {
 
 app.post('/echo', echo.show);
 app.get('/users/:id', users.show);
+app.post('/users', users.create);
 
 module.exports = app;
 
