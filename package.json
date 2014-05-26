@@ -3,9 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app/app.js",
+    "test": "make test"
   },
   "dependencies": {
-    "express": "3.5.0"
+    "express": "3.5.0",
+    "bcrypt": "0.7.8",
+    "mongoose": "3.8.11"
+  },
+  "devDependencies": {
+    "mocha": "1.18.2",
+    "should": "3.3.1"
   }
 }
