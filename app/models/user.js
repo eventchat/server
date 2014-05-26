@@ -15,6 +15,12 @@ var UserSchema = new Schema({
     type: String,
     required: true
   },
+  avatar_url: {
+    type: String
+  },
+  info: {
+    type: String
+  },
 
   // NOTE: the password is securely stored using bcrypt.
   // See the pre-save hook below.
