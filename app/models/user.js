@@ -17,11 +17,9 @@ var UserSchema = new Schema({
   },
   avatar_url: {
     type: String,
-    default: '',
   },
   info: {
     type: String,
-    default: ''
   },
 
   // NOTE: the password is securely stored using bcrypt.
@@ -68,8 +66,8 @@ UserSchema.methods.toJSON = function () {
     id: String(this._id),
     name: this.name,
     email: this.email,
-    avatar_url: this.avatar_url,
-    info: this.info
+    avatar_url: this.avatar_url || null,
+    info: this.info || null
   };
 };
 

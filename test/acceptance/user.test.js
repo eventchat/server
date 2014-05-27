@@ -45,7 +45,7 @@ describe('User API', function () {
           name: 'Joe',
           email: 'joe@example.com',
           info: 'This guy is lazy',
-          avatar_url: ''
+          avatar_url: null
         })
         .end(done);
     });
