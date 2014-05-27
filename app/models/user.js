@@ -67,7 +67,8 @@ UserSchema.methods.toJSON = function () {
     name: this.name,
     email: this.email,
     avatar_url: this.avatar_url || null,
-    info: this.info || null
+    info: this.info || null,
+    created_at: this._id.getTimestamp().toISOString()
   };
 };
 

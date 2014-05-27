@@ -40,12 +40,15 @@ describe('User API', function () {
     it('should respond with the user\'s json when the user exists', function (done) {
       request(app)
         .get('/users/' + id)
-        .expect({
-          id: id,
-          name: 'Joe',
-          email: 'joe@example.com',
-          info: 'This guy is lazy',
-          avatar_url: null
+        .expect(function (res) {
+          res.body.should.have.properties({
+            id: id,
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null
+          });
+          res.body.should.have.property('created_at');
         })
         .end(done);
     });
