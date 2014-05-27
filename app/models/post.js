@@ -25,8 +25,6 @@ var PostSchema = new Schema({
   },
   comments: {
     type: [CommentSchema],
-    required: true,
-    default: []
   }
 });
 
