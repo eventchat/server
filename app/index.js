@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var echo     = require('./controllers/echo');
 var users    = require('./controllers/users');
 var events   = require('./controllers/events');
+var posts    = require('./controllers/posts');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.get('/users/:id', users.show);
 app.post('/users', users.create);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
+app.get('/posts/:id', posts.show);
 
 module.exports = app;
 

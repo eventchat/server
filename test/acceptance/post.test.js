@@ -34,16 +34,15 @@ describe('Post API', function () {
             event = new Event({
               name: 'PyCon',
               description: 'Python Conference',
-              latitude: 37.3894,
-              longitude: -122.0819,
+              location: [37.3894, -122.0819]
             });
             event.save(function () {
               post = new Post({
                 type: 'text',
                 title: 'What\'s MetaClass',
                 body: 'Just dark magic',
-                event_id: String(event._id),
-                author_id: String(user._id)
+                event: event._id,
+                author: user._id
               });
               post.save(done);
             });
