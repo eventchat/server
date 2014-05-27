@@ -4,7 +4,7 @@ exports.show = function (req, res) {
   var id = req.params.id;
 
   User.findById(req.params.id, function (err, user) {
-    if (err) { 
+    if (err || !user) { 
       return res.send(404, {
         message: 'Cannot find user with ID: ' + id
       });
