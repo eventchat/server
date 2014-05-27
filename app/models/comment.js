@@ -1,6 +1,5 @@
 var mongoose   = require('mongoose');
 var Schema     = mongoose.Schema;
-var UserSchema = require('./user').schema;
 
 var CommentSchema = new Schema({
   body: {
@@ -8,8 +7,8 @@ var CommentSchema = new Schema({
     required: true
   },
   author: {
-    type: UserSchema,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
 });
 

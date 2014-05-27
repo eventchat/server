@@ -1,8 +1,6 @@
 var mongoose      = require('mongoose');
 var Schema        = mongoose.Schema;
-var UserSchema    = require('./user').schema;
 var CommentSchema = require('./comment').schema;
-var EventSchema   = require('./event').schema;
 
 var PostSchema = new Schema({
   type: {
@@ -18,12 +16,12 @@ var PostSchema = new Schema({
     required: true
   },
   author: {
-    type: UserSchema,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   },
   event: {
-    type: EventSchema,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
   },
   comments: {
     type: [CommentSchema],
