@@ -2,6 +2,7 @@ var express  = require('express');
 var mongoose = require('mongoose');
 var echo     = require('./controllers/echo');
 var users    = require('./controllers/users');
+var events   = require('./controllers/events');
 
 var app = express();
 
@@ -23,6 +24,8 @@ if ('development' === app.get('env')) {
 app.post('/echo', echo.show);
 app.get('/users/:id', users.show);
 app.post('/users', users.create);
+app.get('/events/:id', events.show);
+app.post('/events', events.create);
 
 module.exports = app;
 
