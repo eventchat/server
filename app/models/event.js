@@ -29,7 +29,8 @@ EventSchema.methods.toJSON = function () {
     latitude: this.location[0],
     longitude: this.location[1],
     start_time: this.start_time ? this.start_time.toISOString() : null,
-    end_time: this.end_time ? this.end_time.toISOString() : null
+    end_time: this.end_time ? this.end_time.toISOString() : null,
+    created_at: this._id.getTimestamp().toISOString()
   };
 };
 

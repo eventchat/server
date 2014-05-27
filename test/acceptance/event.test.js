@@ -39,14 +39,17 @@ describe('Event API', function () {
     it('should respond with the event\'s json when the event exists', function (done) {
       request(app)
         .get('/events/' + id)
-        .expect({
-          id: id,
-          name: 'Pycon',
-          description: 'Python Conference',
-          latitude: 37.3894,
-          longitude: -122.0819,
-          start_time: null,
-          end_time: null
+        .expect(function (res) {
+          res.body.should.have.properties({
+            id: id,
+            name: 'Pycon',
+            description: 'Python Conference',
+            latitude: 37.3894,
+            longitude: -122.0819,
+            start_time: null,
+            end_time: null
+          });
+          res.body.should.have.properties('created_at');
         })
         .end(done);
     });
