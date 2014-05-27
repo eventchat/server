@@ -10,13 +10,7 @@ exports.show = function (req, res) {
       });
     }
 
-    res.json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      info: user.info,
-      avatar_url: user.avatar_url
-    });
+    res.json(user.toJSON());
   });
 };
 

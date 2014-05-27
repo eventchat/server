@@ -63,6 +63,16 @@ UserSchema.methods.comparePassword = function (password, callback) {
   });
 };
 
+UserSchema.methods.toJSON = function () {
+  return {
+    id: String(this._id),
+    name: this.name,
+    email: this.email,
+    avatar_url: this.avatar_url,
+    info: this.info
+  };
+};
+
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;
