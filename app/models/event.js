@@ -13,10 +13,10 @@ var EventSchema = new Schema({
     type: [Number],
     index: '2d'
   },
-  startTime: {
+  start_time: {
     type: Date
   },
-  endTime: {
+  end_time: {
     type: Date
   }
 });
@@ -28,8 +28,8 @@ EventSchema.methods.toJSON = function () {
     description: this.description,
     latitude: this.location[0],
     longitude: this.location[1],
-    start_time: this.startTime ? this.startTime.toISOString() : null,
-    end_time: this.endTime ? this.endTime.toISOString() : null
+    start_time: this.start_time ? this.start_time.toISOString() : null,
+    end_time: this.end_time ? this.end_time.toISOString() : null
   };
 };
 
