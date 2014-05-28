@@ -12,6 +12,15 @@ var CommentSchema = new Schema({
   },
 });
 
+CommentSchema.methods.toJSON = function () {
+  return {
+    id: String(this._id),
+    body: this.body,
+    author: this.author.toJSON(),
+    created_at: this._id.getTimestamp().toISOString()
+  };
+};
+
 
 var Comment = mongoose.model('Comment', CommentSchema);
 module.exports = Comment;

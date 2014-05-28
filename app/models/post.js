@@ -1,6 +1,5 @@
 var mongoose      = require('mongoose');
 var Schema        = mongoose.Schema;
-var CommentSchema = require('./comment').schema;
 
 var PostSchema = new Schema({
   type: {
@@ -23,9 +22,10 @@ var PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Event'
   },
-  comments: {
-    type: [CommentSchema],
-  }
+  comments: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
 });
 
 PostSchema.methods.toJSON = function () {
@@ -36,7 +36,7 @@ PostSchema.methods.toJSON = function () {
     body: this.body,
     author: this.author.toJSON(),
     event: this.event.toJSON(),
-    comments: this.comments,
+    comments: this.comments.map(function (c) { return c.toJSON(); }),
     created_at: this._id.getTimestamp().toISOString()
   };
 };

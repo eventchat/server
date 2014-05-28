@@ -1,3 +1,4 @@
+var async = require('async');
 var Post = require('../models/post');
 
 exports.show = function (req, res) {
@@ -5,7 +6,7 @@ exports.show = function (req, res) {
 
   Post
     .findById(req.params.id)
-    .populate('author event')
+    .populate('author event comments')
     .exec(function (err, post) {
       if (err || !post) { 
         return res.send(404, {
@@ -13,6 +14,11 @@ exports.show = function (req, res) {
         });
       }
 
-      res.json(post.toJSON());
+      // populate comments' authors
+      async.each(post.comments, function (comment, done) {
+        comment.populate('author', done);
+      }, function (err) {
+        res.json(post.toJSON());
+      });
     });
 };
