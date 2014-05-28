@@ -9,7 +9,7 @@ var config   = require('../../config');
 
 describe('Event API', function () {
 
-  var id;
+  var event;
 
   before(function () {
     mongoose.connect(config.db.test.path);
@@ -18,13 +18,12 @@ describe('Event API', function () {
   beforeEach(function (done) {
     // clear the database, then populate sample data
     Event.remove(function () {
-      var event = new Event({
+      event = new Event({
         name: 'Pycon',
         description: 'Python Conference',
         location: [ 37.3894, -122.0819 ]
       });
       event.save(function () {
-        id = String(event._id);
         done();
       });
     });
@@ -38,18 +37,17 @@ describe('Event API', function () {
   describe('GET /events/:event_id', function () {
     it('should respond with the event\'s json when the event exists', function (done) {
       request(app)
-        .get('/events/' + id)
-        .expect(function (res) {
-          res.body.should.have.properties({
-            id: id,
-            name: 'Pycon',
-            description: 'Python Conference',
-            latitude: 37.3894,
-            longitude: -122.0819,
-            start_time: null,
-            end_time: null
-          });
-          res.body.should.have.properties('created_at');
+        .get('/events/' + String(event._id))
+        .expect(200)
+        .expect({
+          id: String(event._id),
+          name: 'Pycon',
+          description: 'Python Conference',
+          latitude: 37.3894,
+          longitude: -122.0819,
+          start_time: null,
+          end_time: null,
+          created_at: event._id.getTimestamp().toISOString()
         })
         .end(done);
     });
