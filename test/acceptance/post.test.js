@@ -60,18 +60,32 @@ describe('Post API', function () {
     it('it should respond with the post\'s json when the post exists', function (done) {
       request(app)
         .get('/posts/' + String(post._id))
-        .expect(function (res) {
-          res.status.should.eql(200);
-
-          res.body.should.have.properties({
-            id: String(post._id),
-            title: 'What\'s MetaClass',
-            body: 'Just dark magic',
-            author: user.toJSON(),
-            event: event.toJSON(),
-            comments: []
-          });
-          res.body.should.have.property('created_at');
+        .expect(200)
+        .expect({
+          id: String(post._id),
+          type: 'text',
+          title: 'What\'s MetaClass',
+          body: 'Just dark magic',
+          author: {
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          },
+          event: {
+            id: String(event._id),
+            name: 'PyCon',
+            description: 'Python Conference',
+            latitude: 37.3894,
+            longitude: -122.0819,
+            start_time: null,
+            end_time: null,
+            created_at: event._id.getTimestamp().toISOString()
+          },
+          comments: [],
+          created_at: post._id.getTimestamp().toISOString()
         })
         .end(done);
     });
