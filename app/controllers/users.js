@@ -28,6 +28,6 @@ exports.create = function (req, res) {
       });
     }
 
-    res.send(200);
+    res.json(user.toJSON());
   });
 };

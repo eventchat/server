@@ -69,6 +69,15 @@ describe('User API', function () {
           email: 'lyman@example.com'
         })
         .expect(200)
+        .expect(function (res) {
+          res.body.should.have.properties({
+            name: 'Lyman',
+            email: 'lyman@example.com',
+            info: null,
+            avatar_url: null,
+          });
+          res.body.should.have.properties(['id', 'created_at']);
+        })
         .end(done);
     });
 
