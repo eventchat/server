@@ -9,7 +9,7 @@ var config   = require('../../config');
 
 describe('User API', function () {
 
-  var id;
+  var user;
 
   before(function () {
     mongoose.connect(config.db.test.path);
@@ -18,16 +18,13 @@ describe('User API', function () {
   beforeEach(function (done) {
     // clear the database, then populate sample data
     User.remove(function () {
-      var user = new User({
+      user = new User({
         name: 'Joe',
         email: 'joe@example.com',
         info: 'This guy is lazy',
         password: '123456'
       });
-      user.save(function () {
-        id = String(user._id);
-        done();
-      });
+      user.save(done);
     });
   });
 
@@ -39,16 +36,15 @@ describe('User API', function () {
   describe('GET /users/:user_id', function () {
     it('should respond with the user\'s json when the user exists', function (done) {
       request(app)
-        .get('/users/' + id)
-        .expect(function (res) {
-          res.body.should.have.properties({
-            id: id,
-            name: 'Joe',
-            email: 'joe@example.com',
-            info: 'This guy is lazy',
-            avatar_url: null
-          });
-          res.body.should.have.property('created_at');
+        .get('/users/' + String(user._id))
+        .expect(200)
+        .expect({
+          id: String(user._id),
+          name: 'Joe',
+          email: 'joe@example.com',
+          info: 'This guy is lazy',
+          avatar_url: null,
+          created_at: user._id.getTimestamp().toISOString()
         })
         .end(done);
     });
