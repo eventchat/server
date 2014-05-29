@@ -239,4 +239,56 @@ describe('Post API', function () {
         });
     });
   });
+
+  describe('GET /posts/search', function () {
+    it('should respond with the posts within the specified area', function (done) {
+      request(app)
+        .get('/posts/search')
+        .query({
+          latitude: 37.3893, // test post latitude is 37.3894
+          longitude: -122.0819,
+          max_distance: 100
+        })
+        .expect(200)
+        .expect([{
+          id: String(post._id),
+          type: 'text',
+          title: 'What\'s MetaClass',
+          body: 'Just dark magic',
+          author: {
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          },
+          event: {
+            id: String(event._id),
+            name: 'PyCon',
+            description: 'Python Conference',
+            latitude: 37.3894,
+            longitude: -122.0819,
+            start_time: null,
+            end_time: null,
+            created_at: event._id.getTimestamp().toISOString()
+          },
+          comments: [{ 
+            id: String(comment._id),
+            body: 'Awesome',
+            author: {
+              id: String(user._id),
+              name: 'Joe',
+              email: 'joe@example.com',
+              info: 'This guy is lazy',
+              avatar_url: null,
+              created_at: user._id.getTimestamp().toISOString()
+            },
+            created_at: comment._id.getTimestamp().toISOString()
+          }],
+          created_at: post._id.getTimestamp().toISOString()
+        }])
+        .end(done);
+    });
+  });
 });
