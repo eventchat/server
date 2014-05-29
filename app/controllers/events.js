@@ -18,7 +18,7 @@ exports.create = function (req, res) {
   var event = new Event({
     name: req.body.name,
     description: req.body.description,
-    location: [req.body.latitude, req.body.longitude],
+    location: [ req.body.longitude, req.body.latitude ],
     start_time: req.body.start_time,
     end_time: req.body.end_time,
   });
@@ -29,6 +29,6 @@ exports.create = function (req, res) {
       });
     }
 
-    res.send(200);
+    res.json(event.toJSON());
   });
 };

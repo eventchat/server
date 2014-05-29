@@ -73,6 +73,16 @@ describe('Event API', function () {
           latitude: 37.3894
         })
         .expect(200)
+        .expect(function (res) {
+          res.body.should.have.properties({
+            name: 'JsConf',
+            description: 'JavaScript Conference',
+            longitude: -122.0819,
+            latitude: 37.3894,
+            start_time: null,
+            end_time: null,
+          });
+        })
         .end(done);
     });
   });
