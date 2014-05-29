@@ -20,6 +20,13 @@ softwares installed.
 Installation
 ------------
 
+Copy `config.json.example` to `config.json` and modify accordingly
+
+```bash
+cp config.json.example config.json
+```
+    
+
 Install node.js modules:
 
 ```bash
