@@ -31,6 +31,7 @@ app.get('/users/:id', users.show);
 app.post('/users', users.create);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
+app.get('/posts/search', posts.search);
 app.get('/posts/:id', posts.show);
 app.post('/posts', posts.create);
 app.delete('/posts/:id', posts.delete);

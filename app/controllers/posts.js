@@ -1,26 +1,32 @@
 var async = require('async');
+var Event = require('../models/event');
 var Post = require('../models/post');
+
+function populatePost(post, callback) {
+  post.populate('author event comments', function (err) {
+    // populate comments' authors
+    async.each(post.comments, function (comment, done) {
+      comment.populate('author', done);
+    }, function (err) {
+      callback(err, post.toJSON());
+    });
+  });
+}
 
 exports.show = function (req, res) {
   var id = req.params.id;
 
-  Post
-    .findById(req.params.id)
-    .populate('author event comments')
-    .exec(function (err, post) {
-      if (err || !post) { 
-        return res.send(404, {
-          message: 'Cannot find post with ID: ' + id
-        });
-      }
-
-      // populate comments' authors
-      async.each(post.comments, function (comment, done) {
-        comment.populate('author', done);
-      }, function (err) {
-        res.json(post.toJSON());
+  Post.findById(req.params.id, function (err, post) {
+    if (err || !post) {
+      return res.send(404, {
+        message: 'Cannot find post with ID: ' + id
       });
+    }
+
+    populatePost(post, function (err, post) {
+      res.json(post);
     });
+  });
 };
 
 exports.create = function (req, res) {
@@ -45,8 +51,8 @@ exports.create = function (req, res) {
       });
     }
 
-    post.populate('author event', function () {
-      res.send(post.toJSON());
+    populatePost(post, function (err, post) {
+      res.send(post);
     });
   });
 };
@@ -66,5 +72,33 @@ exports.delete  = function (req, res) {
     post.remove(function () {
       res.send(200);
     });
+  });
+};
+
+exports.search = function (req, res) {
+  var latitude = req.query.latitude;
+  var longitude = req.query.longitude;
+  var maxDistance = req.query.max_distance || 500;
+
+  // find events within the range
+  Event.find({
+    location: {
+      $near: [ latitude, longitude ],
+      $maxDistance: maxDistance
+    }
+  }, function (err, events) {
+    // find posts associated with these events
+
+    var eventIds = events.map(function (e) {
+      return e._id;
+    });
+
+    Post
+      .find({ event: { $in: eventIds } })
+      .exec(function (err, posts) {
+        async.map(posts, populatePost, function (err, posts) {
+          res.send(posts);
+        });
+      });
   });
 };
