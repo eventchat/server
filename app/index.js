@@ -1,5 +1,6 @@
 var express  = require('express');
 var mongoose = require('mongoose');
+var config   = require('../config');
 var echo     = require('./controllers/echo');
 var users    = require('./controllers/users');
 var events   = require('./controllers/events');
@@ -17,6 +18,8 @@ if ('development' === app.get('env')) {
 
 app.use(express.methodOverride());
 app.use(express.bodyParser());
+app.use(express.cookieParser(config.secret));
+app.use(express.cookieSession());
 app.use(app.router);
 
 if ('development' === app.get('env')) {
