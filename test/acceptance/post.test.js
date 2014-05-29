@@ -206,6 +206,10 @@ describe('Post API', function () {
         })
         .expect(200)
         .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
           agent
             .delete('/posts/' + String(post._id))
             .expect(401)
@@ -224,6 +228,10 @@ describe('Post API', function () {
         })
         .expect(200)
         .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
           agent
             .delete('/posts/123')
             .expect(404)

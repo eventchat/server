@@ -76,7 +76,12 @@ describe('Session API', function () {
           name: 'Joe',
           password: '123456'
         })
+        .expect(200)
         .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
           agent
             .get('/session')
             .expect(200)
@@ -100,10 +105,18 @@ describe('Session API', function () {
         })
         .expect(200)
         .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
           agent
             .delete('/session')
             .expect(200)
             .end(function (err, res) {
+              if (err) {
+                return done(err);
+              }
+
               agent
                 .get('/session')
                 .expect(200)
