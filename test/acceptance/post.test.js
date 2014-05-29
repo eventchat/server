@@ -114,4 +114,18 @@ describe('Post API', function () {
         .end(done);
     });
   });
+
+  describe('POST /posts', function () {
+    it('should respond with 401 if user is not logged in', function (done) {
+      request(app)
+        .post('/posts')
+        .send({
+          title: 'JsConf',
+          body: 'Cool',
+          event: String(event._id),
+        })
+        .expect(401)
+        .end(done);
+    });
+  });
 });
