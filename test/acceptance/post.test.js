@@ -13,6 +13,7 @@ var config   = require('../../config');
 describe('Post API', function () {
 
   var user;
+  var user2;
   var event;
   var comment;
   var post;
@@ -34,26 +35,34 @@ describe('Post API', function () {
               password: '123456'
             });
             user.save(function () {
-              event = new Event({
-                name: 'PyCon',
-                description: 'Python Conference',
-                location: [37.3894, -122.0819]
+              user2 = new User({
+                name: 'Lyman',
+                email: 'lyman@example.com',
+                info: 'This guy is also lazy',
+                password: '123456'
               });
-              event.save(function () {
-                comment = new Comment({
-                  author: user._id,
-                  body: 'Awesome'
+              user2.save(function () {
+                event = new Event({
+                  name: 'PyCon',
+                  description: 'Python Conference',
+                  location: [37.3894, -122.0819]
                 });
-                comment.save(function () {
-                  post = new Post({
-                    type: 'text',
-                    title: 'What\'s MetaClass',
-                    body: 'Just dark magic',
-                    event: event._id,
+                event.save(function () {
+                  comment = new Comment({
                     author: user._id,
-                    comments: [comment._id]
+                    body: 'Awesome'
                   });
-                  post.save(done);
+                  comment.save(function () {
+                    post = new Post({
+                      type: 'text',
+                      title: 'What\'s MetaClass',
+                      body: 'Just dark magic',
+                      event: event._id,
+                      author: user._id,
+                      comments: [comment._id]
+                    });
+                    post.save(done);
+                  });
                 });
               });
             });
@@ -126,6 +135,89 @@ describe('Post API', function () {
         })
         .expect(401)
         .end(done);
+    });
+
+    it('should respond with the saved post\'s json when successfully created the post', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Joe',
+          password: '123456'
+        })
+        .end(function (err, res) {
+          agent
+            .post('/posts')
+            .send({
+              title: 'Hello',
+              type: 'text',
+              body: 'Hi all',
+              event_id: String(event._id),
+            })
+            .expect(200)
+            .expect(function (res) {
+              res.body.should.have.properties({
+                type: 'text',
+                title: 'Hello',
+                body: 'Hi all',
+                author: {
+                  id: String(user._id),
+                  name: 'Joe',
+                  email: 'joe@example.com',
+                  info: 'This guy is lazy',
+                  avatar_url: null,
+                  created_at: user._id.getTimestamp().toISOString()
+                },
+                event: {
+                  id: String(event._id),
+                  name: 'PyCon',
+                  description: 'Python Conference',
+                  latitude: 37.3894,
+                  longitude: -122.0819,
+                  start_time: null,
+                  end_time: null,
+                  created_at: event._id.getTimestamp().toISOString()
+                },
+                comments: [],
+              });
+            })
+            .end(done);
+        });
+    });
+  });
+
+  describe('DELETE /posts/:post_id', function () {
+    it('should return 404 if the post does not exist', function (done) {
+      request(app)
+        .delete('/posts/123')
+        .expect(404)
+        .end(done);
+    });
+
+    it('should return 401 if the user is not signed in', function (done) {
+      request(app)
+        .delete('/posts/' + String(post._id))
+        .expect(401)
+        .end(done);
+    });
+
+    it('should return 401 if the post does not belong to the current user', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'lyman',
+          password: '123456'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          agent
+            .delete('/posts/' + String(post._id))
+            .expect(401)
+            .end(done);
+        });
     });
   });
 });
