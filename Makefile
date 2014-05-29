@@ -9,6 +9,8 @@ server:
 	@node server.js
 
 test:
+	@rm -f config.json
+	@cp config.json.example config.json
 	@NODE_ENV=test \
 		./node_modules/.bin/mocha \
 			--require should \
