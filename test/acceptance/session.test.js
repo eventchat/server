@@ -32,7 +32,6 @@ describe('Session API', function () {
     mongoose.disconnect();
   });
 
-
   describe('POST /session', function () {
     it('should respond with 200 when username and password match', function (done) {
       request(app)
@@ -45,7 +44,7 @@ describe('Session API', function () {
         .end(done);
     });
 
-    it('should respond with 401 when username and password does not match', function (done) {
+    it('should respond with 401 when username and password do not match', function (done) {
       request(app)
         .post('/session')
         .send({
@@ -54,6 +53,66 @@ describe('Session API', function () {
         })
         .expect(401)
         .end(done);
+    });
+  });
+
+  describe('GET /session', function () {
+    it('should return falsy status before user logged in', function (done) {
+      request(app)
+        .get('/session')
+        .expect(200)
+        .expect({
+          logged_in: false
+        })
+        .end(done);
+    });
+
+    it('should return truthy status after user logged in', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Joe',
+          password: '123456'
+        })
+        .end(function (err, res) {
+          agent
+            .get('/session')
+            .expect(200)
+            .expect({
+              logged_in: true
+            })
+            .end(done);
+        });
+    });
+  });
+
+  describe('DELETE /session', function () {
+    it('should log the user out', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Joe',
+          password: '123456'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          agent
+            .delete('/session')
+            .expect(200)
+            .end(function (err, res) {
+              agent
+                .get('/session')
+                .expect(200)
+                .expect({
+                  logged_in: false
+                })
+                .end(done);
+            });
+        });
     });
   });
 });
