@@ -4,6 +4,7 @@ var echo     = require('./controllers/echo');
 var users    = require('./controllers/users');
 var events   = require('./controllers/events');
 var posts    = require('./controllers/posts');
+var session  = require('./controllers/session');
 
 var app = express();
 
@@ -28,6 +29,7 @@ app.post('/users', users.create);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
 app.get('/posts/:id', posts.show);
+app.post('/session', session.create);
 
 module.exports = app;
 
