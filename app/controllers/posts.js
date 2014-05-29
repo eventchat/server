@@ -35,16 +35,36 @@ exports.create = function (req, res) {
     type: req.body.type,
     body: req.body.body,
     event: req.body.event_id,
-    author: user._id
+    author: user.id
   });
 
   post.save(function (err) {
     if (err) {
-      res.send(400, {
+      return res.send(400, {
         message: err
       });
     }
 
-    res.send(post.toJSON());
+    post.populate('author event', function () {
+      res.send(post.toJSON());
+    });
+  });
+};
+
+exports.delete  = function (req, res) {
+  Post.findById(req.params.id, function (err, post) {
+    if (err || !post) {
+      return res.send(404);
+    }
+
+    var user = req.session.user;
+
+    if (!user || String(post.author) !== user.id) {
+      return res.send(401);
+    }
+
+    post.remove(function () {
+      res.send(200);
+    });
   });
 };
