@@ -10,6 +10,10 @@ exports.create = function (req, res) {
 
     user.comparePassword(req.body.password, function (err, match) {
       if (match) {
+
+        // NOTE: user will be serialized using the toJSON() method;
+        // the restored user will be a plain JS object, instead of
+        // an instance of the mongoose Model.
         req.session.user = user;
         return res.send(200);
       }
