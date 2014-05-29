@@ -22,3 +22,29 @@ exports.show = function (req, res) {
       });
     });
 };
+
+exports.create = function (req, res) {
+  var user = req.session.user;
+
+  if (!user) {
+    return res.send(401);
+  }
+
+  var post = new Post({
+    title: req.body.title,
+    type: req.body.type,
+    body: req.body.body,
+    event: req.body.event_id,
+    author: user._id
+  });
+
+  post.save(function (err) {
+    if (err) {
+      res.send(400, {
+        message: err
+      });
+    }
+
+    res.send(post.toJSON());
+  });
+};

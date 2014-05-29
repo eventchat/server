@@ -32,6 +32,7 @@ app.post('/users', users.create);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
 app.get('/posts/:id', posts.show);
+app.post('/posts', posts.create);
 app.post('/session', session.create);
 app.get('/session', session.show);
 app.delete('/session', session.delete);
