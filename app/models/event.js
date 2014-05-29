@@ -26,8 +26,8 @@ EventSchema.methods.toJSON = function () {
     id: String(this._id),
     name: this.name,
     description: this.description,
-    latitude: this.location[0],
-    longitude: this.location[1],
+    longitude: this.location[0],
+    latitude: this.location[1],
     start_time: this.start_time ? this.start_time.toISOString() : null,
     end_time: this.end_time ? this.end_time.toISOString() : null,
     created_at: this._id.getTimestamp().toISOString()

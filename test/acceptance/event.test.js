@@ -21,7 +21,7 @@ describe('Event API', function () {
       event = new Event({
         name: 'Pycon',
         description: 'Python Conference',
-        location: [ 37.3894, -122.0819 ]
+        location: [ -122.0819, 37.3894 ]
       });
       event.save(function () {
         done();
@@ -43,8 +43,8 @@ describe('Event API', function () {
           id: String(event._id),
           name: 'Pycon',
           description: 'Python Conference',
-          latitude: 37.3894,
           longitude: -122.0819,
+          latitude: 37.3894,
           start_time: null,
           end_time: null,
           created_at: event._id.getTimestamp().toISOString()
@@ -69,8 +69,8 @@ describe('Event API', function () {
         .send({
           name: 'JsConf',
           description: 'JavaScript Conference',
-          latitude: 37.3894,
-          longitude: -122.0819
+          longitude: -122.0819,
+          latitude: 37.3894
         })
         .expect(200)
         .end(done);

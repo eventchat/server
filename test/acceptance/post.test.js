@@ -45,7 +45,7 @@ describe('Post API', function () {
                 event = new Event({
                   name: 'PyCon',
                   description: 'Python Conference',
-                  location: [37.3894, -122.0819]
+                  location: [-122.0819, 37.3894]
                 });
                 event.save(function () {
                   comment = new Comment({
@@ -99,8 +99,8 @@ describe('Post API', function () {
             id: String(event._id),
             name: 'PyCon',
             description: 'Python Conference',
-            latitude: 37.3894,
             longitude: -122.0819,
+            latitude: 37.3894,
             start_time: null,
             end_time: null,
             created_at: event._id.getTimestamp().toISOString()
@@ -173,8 +173,8 @@ describe('Post API', function () {
                   id: String(event._id),
                   name: 'PyCon',
                   description: 'Python Conference',
-                  latitude: 37.3894,
                   longitude: -122.0819,
+                  latitude: 37.3894,
                   start_time: null,
                   end_time: null,
                   created_at: event._id.getTimestamp().toISOString()
@@ -245,9 +245,9 @@ describe('Post API', function () {
       request(app)
         .get('/posts/search')
         .query({
-          latitude: 37.3893, // test post latitude is 37.3894
           longitude: -122.0819,
-          max_distance: 100
+          latitude: 37.3894, // test post latitude is 37.3894
+          max_distance: 1000
         })
         .expect(200)
         .expect([{
@@ -267,8 +267,8 @@ describe('Post API', function () {
             id: String(event._id),
             name: 'PyCon',
             description: 'Python Conference',
-            latitude: 37.3894,
             longitude: -122.0819,
+            latitude: 37.3894,
             start_time: null,
             end_time: null,
             created_at: event._id.getTimestamp().toISOString()
@@ -288,6 +288,19 @@ describe('Post API', function () {
           }],
           created_at: post._id.getTimestamp().toISOString()
         }])
+        .end(done);
+    });
+
+    it('should not respond with the posts outside the specified area', function (done) {
+      request(app)
+        .get('/posts/search')
+        .query({
+          longitude: -122.0819,
+          latitude: 57.3894, // test post latitude is 37.3894
+          max_distance: 100
+        })
+        .expect(200)
+        .expect([])
         .end(done);
     });
   });

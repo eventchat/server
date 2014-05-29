@@ -76,14 +76,19 @@ exports.delete  = function (req, res) {
 };
 
 exports.search = function (req, res) {
-  var latitude = req.query.latitude;
   var longitude = req.query.longitude;
+  var latitude = req.query.latitude;
   var maxDistance = req.query.max_distance || 500;
 
   // find events within the range
   Event.find({
     location: {
-      $near: [ latitude, longitude ],
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates: [ longitude, latitude ]
+        }
+      },
       $maxDistance: maxDistance
     }
   }, function (err, events) {
