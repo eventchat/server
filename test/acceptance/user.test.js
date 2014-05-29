@@ -12,7 +12,7 @@ describe('User API', function () {
   var user;
 
   before(function () {
-    mongoose.connect(config.db.test.path);
+    mongoose.connect(config.DB_URL);
   });
 
   beforeEach(function (done) {

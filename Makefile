@@ -9,9 +9,9 @@ server:
 	@node server.js
 
 test:
-	@rm -f config.json
-	@cp config.json.example config.json
 	@NODE_ENV=test \
+	EVENTCHAT_DB_URL="mongodb://localhost/eventchat-test" \
+	EVENTCHAT_SECRET="i'm secret" \
 		./node_modules/.bin/mocha \
 			--require should \
 			--timeout $(TEST_TIMEOUT) \

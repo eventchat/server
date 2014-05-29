@@ -18,7 +18,7 @@ if ('development' === app.get('env')) {
 
 app.use(express.methodOverride());
 app.use(express.bodyParser());
-app.use(express.cookieParser(config.secret));
+app.use(express.cookieParser(config.SECRET));
 app.use(express.cookieSession());
 app.use(app.router);
 

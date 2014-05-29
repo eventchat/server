@@ -20,23 +20,16 @@ softwares installed.
 Installation
 ------------
 
-Copy `config.json.example` to `config.json` and modify accordingly
-
-```bash
-cp config.json.example config.json
-```
-    
-
 Install node.js modules:
 
 ```bash
 make dep
 ```
 
-Run server
+Run the server: (Note that you have to set the environment variables when running the server)
 
 ```bash
-make server
+EVENTCHAT_DB_URL="mongodb://localhost/eventchat" EVENTCHAT_SECRET="random string" make server
 ```
 
 Run test
