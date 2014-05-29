@@ -1,4 +1,5 @@
 {
+  "secret": "really really secret",
   "db": {
     "test": {
       "path": "mongodb://localhost/eventchat-test"

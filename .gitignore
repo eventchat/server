@@ -3,3 +3,4 @@ node_modules
 *.swp
 *.tmp
 *.log
+config.json
