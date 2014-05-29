@@ -188,13 +188,6 @@ describe('Post API', function () {
   });
 
   describe('DELETE /posts/:post_id', function () {
-    it('should return 404 if the post does not exist', function (done) {
-      request(app)
-        .delete('/posts/123')
-        .expect(404)
-        .end(done);
-    });
-
     it('should return 401 if the user is not signed in', function (done) {
       request(app)
         .delete('/posts/' + String(post._id))
@@ -208,7 +201,7 @@ describe('Post API', function () {
       agent
         .post('/session')
         .send({
-          name: 'lyman',
+          name: 'Lyman',
           password: '123456'
         })
         .expect(200)
@@ -216,6 +209,24 @@ describe('Post API', function () {
           agent
             .delete('/posts/' + String(post._id))
             .expect(401)
+            .end(done);
+        });
+    });
+
+    it('should return 404 if the post does not exist', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Lyman',
+          password: '123456'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          agent
+            .delete('/posts/123')
+            .expect(404)
             .end(done);
         });
     });
