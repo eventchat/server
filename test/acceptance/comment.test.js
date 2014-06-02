@@ -80,7 +80,7 @@ describe('Comment API', function () {
   describe('POST /posts/:post_id/comments', function () {
     it('should respond with 401 when the user is not logged in', function (done) {
       request(app)
-        .post('/posts/' + String(post._id))
+        .post('/posts/' + String(post._id) + '/comments')
         .send({
           body: 'awesome post'
         })
@@ -129,7 +129,7 @@ describe('Comment API', function () {
           }
 
           agent
-            .post('/posts/' + String('post._id'))
+            .post('/posts/' + String('post._id') + '/comments')
             .send({
               body: 'awesome post'
             })
