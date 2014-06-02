@@ -1,6 +1,7 @@
 var async = require('async');
 var Event = require('../models/event');
 var Post = require('../models/post');
+var Comment = require('../models/comment');
 
 function populatePost(post, callback) {
   post.populate('author event comments', function (err) {
@@ -107,3 +108,40 @@ exports.search = function (req, res) {
       });
   });
 };
+
+exports.createComment = function (req, res) {
+  var user = req.session.user;
+
+  if (!user) {
+    return res.send(401);
+  }
+
+  var pid = req.params.post_id;
+  Post.findById(pid, function (err, post) {
+    if (err || !post) {
+      return res.send(404, {
+        message: 'Cannot find post with ID: ' + pid
+      });
+    }
+
+    var comment = new Comment({
+      author: user.id,
+      body: req.body.body
+    });
+
+    comment.save(function (err) {
+      if (err) { res.send(500, { message: err }); }
+
+      post.comments.push(comment._id);
+      post.save(function () {
+        if (err) { res.send(500, { message: err }); }
+
+        populatePost(post, function (err, post) {
+          if (err) { res.send(500, { message: err }); }
+          res.json(post);
+        });
+      });
+    });
+  });
+};
+
