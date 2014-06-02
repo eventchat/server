@@ -136,7 +136,8 @@ describe('Comment API', function () {
             .expect(200)
             .expect(function (res) {
               res.body.comments.length.should.eql(2);
-            });
+            })
+            .end(done);
         });
     });
   });
