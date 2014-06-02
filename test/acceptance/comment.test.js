@@ -129,7 +129,7 @@ describe('Comment API', function () {
           }
 
           agent
-            .post('/posts/' + String('post._id') + '/comments')
+            .post('/posts/' + String(post._id) + '/comments')
             .send({
               body: 'awesome post'
             })
