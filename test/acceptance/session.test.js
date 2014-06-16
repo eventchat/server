@@ -33,7 +33,7 @@ describe('Session API', function () {
   });
 
   describe('POST /session', function () {
-    it('should respond with 200 when username and password match', function (done) {
+    it('should respond with user info when username and password match', function (done) {
       request(app)
         .post('/session')
         .send({
@@ -41,6 +41,14 @@ describe('Session API', function () {
           password: '123456'
         })
         .expect(200)
+        .expect({
+          id: String(user._id),
+          name: 'Joe',
+          email: 'joe@example.com',
+          info: 'This guy is lazy',
+          avatar_url: null,
+          created_at: user._id.getTimestamp().toISOString()
+        })
         .end(done);
     });
 
