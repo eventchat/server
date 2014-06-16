@@ -84,13 +84,8 @@ exports.search = function (req, res) {
   // find events within the range
   Event.find({
     location: {
-      $near: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [ longitude, latitude ]
-        }
-      },
-      $maxDistance: maxDistance
+      $near: [ longitude, latitude ],
+      $maxDistance: maxDistance / 6.371e10 // convert from meter to radian
     }
   }, function (err, events) {
     // find posts associated with these events
