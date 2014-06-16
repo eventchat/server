@@ -15,7 +15,7 @@ exports.create = function (req, res) {
         // the restored user will be a plain JS object, instead of
         // an instance of the mongoose Model.
         req.session.user = user;
-        return res.send(200);
+        return res.send(user);
       }
       res.send(401, {
         message: 'Wrong username or password'
