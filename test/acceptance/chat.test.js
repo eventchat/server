@@ -2,6 +2,8 @@
 
 var mongoose = require('mongoose');
 var request  = require('supertest');
+var async    = require('async');
+var redis    = require('redis').createClient();
 var User     = require('../../app/models/user');
 var app      = require('../../app');
 var config   = require('../../config');
@@ -22,22 +24,24 @@ describe('Chat API', function () {
 
   beforeEach(function (done) {
     // clear the database, then populate sample data
-    User.remove(function () {
-      alice = new User({
-        name: 'Alice',
-        email: 'alice@example.com',
-        info: 'This guy is lazy',
-        password: '123456'
-      });
-      alice.save(function () {
-        bob = new User({
-          name: 'Bob',
-          email: 'bob@example.com',
-          info: 'This guy is also lazy',
+    redis.flushall(function () {
+      User.remove(function () {
+        alice = new User({
+          name: 'Alice',
+          email: 'alice@example.com',
+          info: 'This guy is lazy',
           password: '123456'
         });
-        bob.save(function () {
-          done();
+        alice.save(function () {
+          bob = new User({
+            name: 'Bob',
+            email: 'bob@example.com',
+            info: 'This guy is also lazy',
+            password: '123456'
+          });
+          bob.save(function () {
+            done();
+          });
         });
       });
     });
@@ -50,7 +54,7 @@ describe('Chat API', function () {
       agent
         .post('/session')
         .send({
-          name: 'alice',
+          name: 'Alice',
           password: '123456'
         })
         .expect(200)
@@ -65,8 +69,62 @@ describe('Chat API', function () {
               message: 'hello',
               to: String(alice._id)
             })
-            .expect(200);
+            .expect(200, done);
         });
+    });
+  });
+
+  describe('GET /chat', function () {
+    it('should return unread messages', function (done) {
+      var aliceAgent = request.agent(app);
+      var bobAgent   = request.agent(app);
+
+      async.series([
+        function (callback) {
+          aliceAgent
+            .post('/session')
+            .send({
+              name: 'Alice',
+              password: '123456'
+            })
+            .expect(200)
+            .end(callback);
+        },
+        function (callback) {
+          aliceAgent
+            .post('/chat')
+            .send({
+              message: 'hello',
+              to: String(bob.id)
+            })
+            .expect(200)
+            .end(callback);
+        },
+        function (callback) {
+          bobAgent
+            .post('/session')
+            .send({
+              name: 'Bob',
+              password: '123456'
+            })
+            .expect(200)
+            .end(callback);
+        },
+        function (callback) {
+          bobAgent
+            .get('/chat')
+            .expect(function (res) {
+              res.body.should.be.instanceof(Array);
+              res.body.should.have.lengthOf(1);
+              res.body[0].should.have.properties({
+                from: alice.toJSON()
+              });
+            })
+            .end(callback);
+        }
+      ], function (err) {
+        done(err);
+      });
     });
   });
 });

@@ -12,7 +12,7 @@ exports.create = function (req, res) {
   }
 
   var toId = req.body.to;
-  User.findById(req.body.to, function (err, user) {
+  User.findById(toId, function (err, user) {
     if (err || !user) {
       return res.send(404);
     }
