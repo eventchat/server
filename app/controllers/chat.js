@@ -69,6 +69,10 @@ exports.show = function (req, res) {
         .exec();
     } else {
       connections[id] = res;
+
+      res.socket.once('end', function () {
+        delete connections[id];
+      });
     }
   });
 };
