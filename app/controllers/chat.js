@@ -51,15 +51,24 @@ exports.show = function (req, res) {
   // if there are unread messages,
   // then send them to the current user,
   // else hold the connection and await new messages
-  redis
-    // start transaction
-    .multi()
-    // retrieve all messages
-    .lrange(id, 0, -1, function (err, msgs) {
-      res.json(msgs.map(JSON.parse));
-    })
-    // delete list
-    .del(id)
-    // execute transaction
-    .exec();
+  redis.llen(id, function (err, len) {
+    if (err) {
+      return res.send(err);
+    }
+    if (len) {
+      redis
+        // start transaction
+        .multi()
+        // retrieve all messages
+        .lrange(id, 0, -1, function (err, msgs) {
+          res.json(msgs.map(JSON.parse));
+        })
+        // delete list
+        .del(id)
+        // execute transaction
+        .exec();
+    } else {
+      connections[id] = res;
+    }
+  });
 };
