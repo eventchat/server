@@ -5,6 +5,7 @@ var echo     = require('./controllers/echo');
 var users    = require('./controllers/users');
 var events   = require('./controllers/events');
 var posts    = require('./controllers/posts');
+var chat     = require('./controllers/chat');
 var session  = require('./controllers/session');
 
 var app = express();
@@ -39,6 +40,8 @@ app.post('/posts/:post_id/comments', posts.createComment);
 app.post('/session', session.create);
 app.get('/session', session.show);
 app.delete('/session', session.delete);
+app.get('/chat', chat.show);
+app.post('/chat', chat.create);
 
 module.exports = app;
 
