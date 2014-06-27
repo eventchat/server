@@ -122,9 +122,72 @@ describe('Chat API', function () {
             })
             .end(callback);
         }
-      ], function (err) {
-        done(err);
-      });
+      ], done);
+    });
+
+    it('should wait for new messages if there is no message', function (done) {
+      var aliceAgent = request.agent(app);
+      var bobAgent = request.agent(app);
+
+
+      async.parallel([
+
+        // login bob and get unread message
+        function (callback) {
+          async.series([
+            function (callback) {
+              bobAgent
+                .post('/session')
+                .send({
+                  name: 'Bob',
+                  password: '123456'
+                })
+                .expect(200)
+                .end(callback);
+            },
+            function (callback) {
+              bobAgent
+                .get('/chat')
+                .expect(function (res) {
+                  res.body.should.be.instanceof(Array);
+                  res.body.should.have.lengthOf(1);
+                  res.body[0].should.have.properties({
+                    from: alice.toJSON()
+                  });
+                })
+                .end(callback);
+            }
+          ], callback);
+        },
+
+        // login alice and send message to bob after 3 seconds
+        function (callback) {
+          async.series([
+            function (callback) {
+              aliceAgent
+                .post('/session')
+                .send({
+                  name: 'Alice',
+                  password: '123456'
+                })
+                .expect(200)
+                .end(callback);
+            },
+            function (callback) {
+              setTimeout(function () {
+                aliceAgent
+                  .post('/chat')
+                  .send({
+                    message: 'hello',
+                    to: String(bob.id)
+                  })
+                  .expect(200)
+                  .end(callback);
+              }, 2000);
+            }
+          ], callback);
+        }
+      ], done);
     });
   });
 });
