@@ -1,7 +1,11 @@
-var config = require('../../config');
-var redis = require('redis-url').connect(config.REDIS_URL);
 var User = require('../models/user');
+var config = require('../../config');
+var url = require('url').parse(config.REDIS_URL);
+var redis = require('redis').createClient(url.port, url.hostname);
 
+if (url.auth) {
+  redis.auth(url.auth.split(':')[1]);
+}
 
 // map from user id to connection
 var connections = {};

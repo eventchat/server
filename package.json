@@ -11,8 +11,7 @@
     "bcrypt": "0.7.8",
     "express": "3.5.0",
     "mongoose": "3.8.11",
-    "redis": "0.10.3",
-    "redis-url": "0.2.0"
+    "redis": "0.10.3"
   },
   "devDependencies": {
     "mocha": "1.18.2",
