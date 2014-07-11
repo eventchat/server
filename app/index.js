@@ -37,6 +37,7 @@ app.get('/posts/:id', posts.show);
 app.post('/posts', posts.create);
 app.delete('/posts/:id', posts.delete);
 app.post('/posts/:post_id/comments', posts.createComment);
+app.get('/users/:id/posts', posts.indexByUser);
 app.post('/session', session.create);
 app.get('/session', session.show);
 app.delete('/session', session.delete);

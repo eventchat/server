@@ -1,6 +1,7 @@
 var async = require('async');
 var Event = require('../models/event');
 var Post = require('../models/post');
+var User = require('../models/user');
 var Comment = require('../models/comment');
 
 function populatePost(post, callback) {
@@ -140,3 +141,13 @@ exports.createComment = function (req, res) {
   });
 };
 
+exports.indexByUser = function (req, res) {
+  var id = req.params.id;
+  Post.find({ author: id }, function (err, posts) {
+    if (err) { res.send(500, { message: err }); }
+
+    async.map(posts, populatePost, function (err, posts) {
+      res.send(posts);
+    });
+  });
+};
