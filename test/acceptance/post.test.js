@@ -304,4 +304,50 @@ describe('Post API', function () {
         .end(done);
     });
   });
+
+  describe('GET /users/:id/posts', function () {
+    it('should respond with the posts authored by the given user', function (done) {
+      request(app)
+        .get('/users/' + String(user._id) + '/posts')
+        .expect([{
+          id: String(post._id),
+          type: 'text',
+          title: 'What\'s MetaClass',
+          body: 'Just dark magic',
+          author: {
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          },
+          event: {
+            id: String(event._id),
+            name: 'PyCon',
+            description: 'Python Conference',
+            longitude: -122.0819,
+            latitude: 37.3894,
+            start_time: null,
+            end_time: null,
+            created_at: event._id.getTimestamp().toISOString()
+          },
+          comments: [{ 
+            id: String(comment._id),
+            body: 'Awesome',
+            author: {
+              id: String(user._id),
+              name: 'Joe',
+              email: 'joe@example.com',
+              info: 'This guy is lazy',
+              avatar_url: null,
+              created_at: user._id.getTimestamp().toISOString()
+            },
+            created_at: comment._id.getTimestamp().toISOString()
+          }],
+          created_at: post._id.getTimestamp().toISOString()
+        }])
+        .end(done);
+    });
+  });
 });
