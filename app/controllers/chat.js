@@ -1,5 +1,5 @@
 var config = require('../../config');
-var redis = require('redis').createClient(config.REDIS_PORT, parseInt(config.REDIS_HOST));
+var redis = require('redis-url').connect(config.REDIS_URL);
 var User = require('../models/user');
 
 

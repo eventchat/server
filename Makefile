@@ -11,8 +11,7 @@ server:
 test:
 	@NODE_ENV=test \
 	EVENTCHAT_DB_URL="mongodb://localhost/eventchat-test" \
-	EVENTCHAT_REDIS_HOST="127.0.0.1" \
-	EVENTCHAT_REDIS_PORT=6379 \
+	EVENTCHAT_REDIS_URL="redis://127.0.0.1:6379" \
 	EVENTCHAT_SECRET="i'm secret" \
 		./node_modules/.bin/mocha \
 			--require should \
