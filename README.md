@@ -11,10 +11,11 @@ Dependencies
 ------------
 
 Before installing the server, make sure that you have the following
-softwares installed.
+softwares installed and running.
 
 * Node.js
 * MongoDB
+* Redis
 
 
 Installation
@@ -29,7 +30,10 @@ make dep
 Run the server: (Note that you have to set the environment variables when running the server)
 
 ```bash
-EVENTCHAT_DB_URL="mongodb://localhost/eventchat" EVENTCHAT_SECRET="random string" make server
+EVENTCHAT_REDIS_URL="redis://localhost:6379" \
+EVENTCHAT_DB_URL="mongodb://localhost/eventchat" \
+EVENTCHAT_SECRET="random string" \
+make server
 ```
 
 Run test
