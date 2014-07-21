@@ -86,4 +86,28 @@ describe('Event API', function () {
         .end(done);
     });
   });
+
+  describe('GET /events/search', function () {
+    it('should respond with the events within the specified area', function (done) {
+      request(app)
+        .get('/events/search')
+        .query({
+          longitude: -122.0819,
+          latitude: 37.3894,
+          max_distance: 1000
+        })
+        .expect(200)
+        .expect([{
+          id: String(event._id),
+          name: 'Pycon',
+          description: 'Python Conference',
+          longitude: -122.0819,
+          latitude: 37.3894,
+          start_time: null,
+          end_time: null,
+          created_at: event._id.getTimestamp().toISOString()
+        }])
+        .end(done);
+    });
+  });
 });
