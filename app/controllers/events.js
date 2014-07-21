@@ -32,3 +32,25 @@ exports.create = function (req, res) {
     res.json(event.toJSON());
   });
 };
+
+exports.search = function (req, res) {
+  var longitude = req.query.longitude;
+  var latitude = req.query.latitude;
+  var maxDistance = req.query.max_distance || 500;
+
+  // find events within the range
+  Event.find({
+    location: {
+      $near: [ longitude, latitude ],
+      $maxDistance: maxDistance / 6.371e10 // convert from meter to radian
+    }
+  }, function (err, events) {
+    if (err || !events) {
+      return res.send(404);
+    }
+
+    res.json(events.map(function (e) {
+      return e.toJSON();
+    }));
+  });
+};
