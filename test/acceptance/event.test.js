@@ -21,7 +21,8 @@ describe('Event API', function () {
       event = new Event({
         name: 'Pycon',
         description: 'Python Conference',
-        location: [ -122.0819, 37.3894 ]
+        location: [ -122.0819, 37.3894 ],
+        address: '777 W MiddleField Rd. Mountain View, CA, 94043'
       });
       event.save(function () {
         done();
@@ -45,6 +46,7 @@ describe('Event API', function () {
           description: 'Python Conference',
           longitude: -122.0819,
           latitude: 37.3894,
+          address: '777 W MiddleField Rd. Mountain View, CA, 94043',
           start_time: null,
           end_time: null,
           created_at: event._id.getTimestamp().toISOString()
@@ -70,7 +72,8 @@ describe('Event API', function () {
           name: 'JsConf',
           description: 'JavaScript Conference',
           longitude: -122.0819,
-          latitude: 37.3894
+          latitude: 37.3894,
+          address: '777 W MiddleField Rd. Mountain View, CA, 94043'
         })
         .expect(200)
         .expect(function (res) {
@@ -79,6 +82,7 @@ describe('Event API', function () {
             description: 'JavaScript Conference',
             longitude: -122.0819,
             latitude: 37.3894,
+            address: '777 W MiddleField Rd. Mountain View, CA, 94043',
             start_time: null,
             end_time: null,
           });
@@ -103,6 +107,7 @@ describe('Event API', function () {
           description: 'Python Conference',
           longitude: -122.0819,
           latitude: 37.3894,
+          address: '777 W MiddleField Rd. Mountain View, CA, 94043',
           start_time: null,
           end_time: null,
           created_at: event._id.getTimestamp().toISOString()
