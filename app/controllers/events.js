@@ -19,6 +19,7 @@ exports.create = function (req, res) {
     name: req.body.name,
     description: req.body.description,
     location: [ req.body.longitude, req.body.latitude ],
+    address: req.body.address,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
   });

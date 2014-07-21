@@ -13,6 +13,9 @@ var EventSchema = new Schema({
     type: [Number],
     index: '2d'
   },
+  address: {
+    type: String
+  },
   start_time: {
     type: Date
   },
@@ -28,6 +31,7 @@ EventSchema.methods.toJSON = function () {
     description: this.description,
     longitude: this.location[0],
     latitude: this.location[1],
+    address: this.address,
     start_time: this.start_time ? this.start_time.toISOString() : null,
     end_time: this.end_time ? this.end_time.toISOString() : null,
     created_at: this._id.getTimestamp().toISOString()
