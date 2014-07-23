@@ -16,6 +16,10 @@ var EventSchema = new Schema({
   address: {
     type: String
   },
+  attendees: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
   start_time: {
     type: Date
   },
