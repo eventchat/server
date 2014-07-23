@@ -4,12 +4,14 @@ var mongoose = require('mongoose');
 var request  = require('supertest');
 var app      = require('../../app');
 var Event    = require('../../app/models/event');
+var User     = require('../../app/models/user');
 var config   = require('../../config');
 
 
 describe('Event API', function () {
 
   var event;
+  var user;
 
   before(function () {
     mongoose.connect(config.DB_URL);
@@ -25,7 +27,15 @@ describe('Event API', function () {
         address: '777 W MiddleField Rd. Mountain View, CA, 94043'
       });
       event.save(function () {
-        done();
+        User.remove(function () {
+          user = new User({
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            password: '123456'
+          });
+          user.save(done);
+        });
       });
     });
   });
@@ -113,6 +123,30 @@ describe('Event API', function () {
           created_at: event._id.getTimestamp().toISOString()
         }])
         .end(done);
+    });
+  });
+
+  describe('POST /events/:event_id/attendees', function () {
+    it('should register the current user to the attendees', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Joe',
+          password: '123456'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
+          agent
+            .post('/events/' + String(event._id) + '/attendees')
+            .expect(200)
+            .end(done);
+        });
     });
   });
 });
