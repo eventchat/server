@@ -71,3 +71,31 @@ exports.indexAttendees = function (req, res) {
     });
   });
 };
+
+exports.joinEvent = function (req, res) {
+  var id = req.params.id;
+  var user = req.session.user;
+
+  if (!user) {
+    return res.send(401);
+  }
+
+  Event.findById(id, function (err, event) {
+    if (err || !event) {
+      return res.send(404, {
+        message: 'Cannot find event with ID: ' + id
+      });
+    }
+
+    event.attendees.push(user.id);
+    event.save(function (err) {
+      if (err) {
+        return res.send(400, {
+          message: err
+        });
+      }
+
+      res.send(200);
+    });
+  });
+};

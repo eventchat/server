@@ -31,6 +31,8 @@ app.post('/echo', echo.show);
 app.get('/users/:id', users.show);
 app.post('/users', users.create);
 app.get('/events/search', events.search);
+app.get('/events/:id/attendees', events.indexAttendees);
+app.post('/events/:id/attendees', events.joinEvent);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
 app.get('/posts/search', posts.search);
