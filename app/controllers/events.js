@@ -55,3 +55,19 @@ exports.search = function (req, res) {
     }));
   });
 };
+
+exports.indexAttendees = function (req, res) {
+  var id = req.params.id;
+
+  Event.findById(id, function (err, event) {
+    if (err || !event) {
+      return res.send(404, {
+        message: 'Cannot find event with ID: ' + id
+      });
+    }
+
+    event.populate('attendees', function (err) {
+      res.json(event.attendees);
+    });
+  });
+};
