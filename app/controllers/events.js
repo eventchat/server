@@ -38,7 +38,8 @@ exports.create = function (req, res) {
     address: req.body.address,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
-    organizer: user.id
+    organizer: user.id,
+    attendees: [user.id]
   });
   event.save(function (err) {
     if (err) {
