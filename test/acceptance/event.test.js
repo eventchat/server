@@ -230,4 +230,56 @@ describe('Event API', function () {
         });
     });
   });
+
+  describe('GET /users/:user_id/events', function () {
+    it('should get the events that a user attends', function (done) {
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
+        .send({
+          name: 'Joe',
+          password: '123456'
+        })
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
+          agent
+            .post('/events/' + String(event._id) + '/attendees')
+            .expect(200)
+            .end(function (err, res) {
+              if (err) {
+                return done(err);
+              }
+
+              agent
+                .get('/users/' + String(user._id) + '/events')
+                .expect(200)
+                .expect([{
+                  organizer: {
+                    id: String(user._id),
+                    name: 'Joe',
+                    email: 'joe@example.com',
+                    info: 'This guy is lazy',
+                    avatar_url: null,
+                    created_at: user._id.getTimestamp().toISOString()
+                  },
+                  id: String(event._id),
+                  name: 'Pycon',
+                  description: 'Python Conference',
+                  longitude: -122.0819,
+                  latitude: 37.3894,
+                  address: '777 W MiddleField Rd. Mountain View, CA, 94043',
+                  start_time: null,
+                  end_time: null,
+                  created_at: event._id.getTimestamp().toISOString()
+                }])
+                .end(done);
+            });
+        });
+    });
+  });
 });
