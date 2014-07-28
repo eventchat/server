@@ -28,6 +28,7 @@ if ('development' === app.get('env')) {
 }
 
 app.post('/echo', echo.show);
+app.get('/users/:user_id/events', events.indexByUser);
 app.get('/users/:id', users.show);
 app.post('/users', users.create);
 app.get('/events/search', events.search);

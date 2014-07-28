@@ -1,5 +1,6 @@
 var async = require('async');
 var Event = require('../models/event');
+var User = require('../models/user');
 
 function populateEvent(event, callback) {
   event.populate('organizer', function (err) {
@@ -114,6 +115,18 @@ exports.joinEvent = function (req, res) {
       }
 
       res.send(200);
+    });
+  });
+};
+
+exports.indexByUser = function (req, res) {
+  var id = req.params.user_id;
+
+  Event.find({ attendees: { $in: [id] } }, function (err, events) {
+    if (err) { return res.send(400); }
+
+    async.map(events, populateEvent, function (err, events) {
+      res.json(events);
     });
   });
 };
