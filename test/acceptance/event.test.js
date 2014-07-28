@@ -85,28 +85,51 @@ describe('Event API', function () {
 
   describe('POST /events', function () {
     it('should respond with 200 when successfully created the event', function (done) {
-      request(app)
-        .post('/events')
+      var agent = request.agent(app);
+
+      agent
+        .post('/session')
         .send({
-          name: 'JsConf',
-          description: 'JavaScript Conference',
-          longitude: -122.0819,
-          latitude: 37.3894,
-          address: '777 W MiddleField Rd. Mountain View, CA, 94043'
+          name: 'Joe',
+          password: '123456'
         })
         .expect(200)
-        .expect(function (res) {
-          res.body.should.have.properties({
-            name: 'JsConf',
-            description: 'JavaScript Conference',
-            longitude: -122.0819,
-            latitude: 37.3894,
-            address: '777 W MiddleField Rd. Mountain View, CA, 94043',
-            start_time: null,
-            end_time: null,
-          });
-        })
-        .end(done);
+        .end(function (err, res) {
+          if (err) {
+            return done(err);
+          }
+
+          agent
+            .post('/events')
+            .send({
+              name: 'JsConf',
+              description: 'JavaScript Conference',
+              longitude: -122.0819,
+              latitude: 37.3894,
+              address: '777 W MiddleField Rd. Mountain View, CA, 94043'
+            })
+            .expect(200)
+            .expect(function (res) {
+              res.body.should.have.properties({
+                organizer: {
+                  id: String(user._id),
+                  name: 'Joe',
+                  email: 'joe@example.com',
+                  info: 'This guy is lazy',
+                  avatar_url: null,
+                  created_at: user._id.getTimestamp().toISOString()
+                },
+                name: 'JsConf',
+                description: 'JavaScript Conference',
+                longitude: -122.0819,
+                latitude: 37.3894,
+                address: '777 W MiddleField Rd. Mountain View, CA, 94043',
+                start_time: null,
+                end_time: null,
+              });
+            })
+            .end(done);
+        });
     });
   });
 
