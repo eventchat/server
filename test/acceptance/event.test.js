@@ -19,22 +19,23 @@ describe('Event API', function () {
 
   beforeEach(function (done) {
     // clear the database, then populate sample data
-    Event.remove(function () {
-      event = new Event({
-        name: 'Pycon',
-        description: 'Python Conference',
-        location: [ -122.0819, 37.3894 ],
-        address: '777 W MiddleField Rd. Mountain View, CA, 94043'
+    User.remove(function () {
+      user = new User({
+        name: 'Joe',
+        email: 'joe@example.com',
+        info: 'This guy is lazy',
+        password: '123456'
       });
-      event.save(function () {
-        User.remove(function () {
-          user = new User({
-            name: 'Joe',
-            email: 'joe@example.com',
-            info: 'This guy is lazy',
-            password: '123456'
+      user.save(function () {
+        Event.remove(function () {
+          event = new Event({
+            organizer: user._id,
+            name: 'Pycon',
+            description: 'Python Conference',
+            location: [ -122.0819, 37.3894 ],
+            address: '777 W MiddleField Rd. Mountain View, CA, 94043'
           });
-          user.save(done);
+          event.save(done);
         });
       });
     });
@@ -51,6 +52,14 @@ describe('Event API', function () {
         .get('/events/' + String(event._id))
         .expect(200)
         .expect({
+          organizer: {
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          },
           id: String(event._id),
           name: 'Pycon',
           description: 'Python Conference',
@@ -112,6 +121,14 @@ describe('Event API', function () {
         })
         .expect(200)
         .expect([{
+          organizer: {
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          },
           id: String(event._id),
           name: 'Pycon',
           description: 'Python Conference',

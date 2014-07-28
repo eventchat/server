@@ -43,6 +43,7 @@ describe('Comment API', function () {
               });
               user2.save(function () {
                 event = new Event({
+                  organizer: user._id,
                   name: 'PyCon',
                   description: 'Python Conference',
                   location: [-122.0819, 37.3894]

@@ -43,6 +43,7 @@ describe('Post API', function () {
               });
               user2.save(function () {
                 event = new Event({
+                  organizer: user._id,
                   name: 'PyCon',
                   description: 'Python Conference',
                   location: [-122.0819, 37.3894],
@@ -97,6 +98,14 @@ describe('Post API', function () {
             created_at: user._id.getTimestamp().toISOString()
           },
           event: {
+            organizer: {
+              id: String(user._id),
+              name: 'Joe',
+              email: 'joe@example.com',
+              info: 'This guy is lazy',
+              avatar_url: null,
+              created_at: user._id.getTimestamp().toISOString()
+            },
             id: String(event._id),
             name: 'PyCon',
             description: 'Python Conference',
@@ -172,6 +181,14 @@ describe('Post API', function () {
                   created_at: user._id.getTimestamp().toISOString()
                 },
                 event: {
+                  organizer: {
+                    id: String(user._id),
+                    name: 'Joe',
+                    email: 'joe@example.com',
+                    info: 'This guy is lazy',
+                    avatar_url: null,
+                    created_at: user._id.getTimestamp().toISOString()
+                  },
                   id: String(event._id),
                   name: 'PyCon',
                   description: 'Python Conference',
@@ -267,6 +284,14 @@ describe('Post API', function () {
             created_at: user._id.getTimestamp().toISOString()
           },
           event: {
+            organizer: {
+              id: String(user._id),
+              name: 'Joe',
+              email: 'joe@example.com',
+              info: 'This guy is lazy',
+              avatar_url: null,
+              created_at: user._id.getTimestamp().toISOString()
+            },
             id: String(event._id),
             name: 'PyCon',
             description: 'Python Conference',
@@ -327,6 +352,14 @@ describe('Post API', function () {
             created_at: user._id.getTimestamp().toISOString()
           },
           event: {
+            organizer: {
+              id: String(user._id),
+              name: 'Joe',
+              email: 'joe@example.com',
+              info: 'This guy is lazy',
+              avatar_url: null,
+              created_at: user._id.getTimestamp().toISOString()
+            },
             id: String(event._id),
             name: 'PyCon',
             description: 'Python Conference',
