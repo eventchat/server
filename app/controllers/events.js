@@ -25,6 +25,11 @@ exports.show = function (req, res) {
 };
 
 exports.create = function (req, res) {
+  var user = req.session.user;
+  if (!user) {
+    return res.send(400);
+  }
+
   var event = new Event({
     name: req.body.name,
     description: req.body.description,
@@ -32,6 +37,7 @@ exports.create = function (req, res) {
     address: req.body.address,
     start_time: req.body.start_time,
     end_time: req.body.end_time,
+    organizer: user.id
   });
   event.save(function (err) {
     if (err) {
