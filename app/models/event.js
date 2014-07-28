@@ -2,6 +2,10 @@ var mongoose      = require('mongoose');
 var Schema        = mongoose.Schema;
 
 var EventSchema = new Schema({
+  organizer: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   name: {
     type: String,
     required: true
@@ -31,6 +35,7 @@ var EventSchema = new Schema({
 EventSchema.methods.toJSON = function () {
   return {
     id: String(this._id),
+    organizer: this.organizer,
     name: this.name,
     description: this.description,
     longitude: this.location[0],

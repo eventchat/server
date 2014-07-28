@@ -1,4 +1,12 @@
+var async = require('async');
 var Event = require('../models/event');
+
+function populateEvent(event, callback) {
+  event.populate('organizer', function (err) {
+    callback(err, event.toJSON());
+  });
+}
+exports.populateEvent = populateEvent;
 
 exports.show = function (req, res) {
   var id = req.params.id;
@@ -10,7 +18,9 @@ exports.show = function (req, res) {
       });
     }
 
-    res.json(event.toJSON());
+    populateEvent(event, function (err, event) {
+      res.json(event);
+    });
   });
 };
 
@@ -30,7 +40,9 @@ exports.create = function (req, res) {
       });
     }
 
-    res.json(event.toJSON());
+    populateEvent(event, function (err, event) {
+      res.json(event);
+    });
   });
 };
 
@@ -50,9 +62,9 @@ exports.search = function (req, res) {
       return res.send(404);
     }
 
-    res.json(events.map(function (e) {
-      return e.toJSON();
-    }));
+    async.map(events, populateEvent, function (err, events) {
+      res.json(events);
+    });
   });
 };
 

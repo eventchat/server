@@ -1,5 +1,6 @@
 var async = require('async');
 var Event = require('../models/event');
+var populateEvent = require('./events').populateEvent;
 var Post = require('../models/post');
 var User = require('../models/user');
 var Comment = require('../models/comment');
@@ -10,7 +11,11 @@ function populatePost(post, callback) {
     async.each(post.comments, function (comment, done) {
       comment.populate('author', done);
     }, function (err) {
-      callback(err, post.toJSON());
+      if (err) { callback(err); }
+
+      populateEvent(post.event, function (err) {
+        callback(err, post.toJSON());
+      });
     });
   });
 }
