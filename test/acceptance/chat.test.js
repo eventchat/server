@@ -183,7 +183,7 @@ describe('Chat API', function () {
                   })
                   .expect(200)
                   .end(callback);
-              }, 2000);
+              }, 500);
             }
           ], callback);
         }
