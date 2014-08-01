@@ -27,6 +27,9 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
+app.get('/', function (req, res) {
+  res.redirect('http://eventchat.github.io/homepage/');
+});
 app.post('/echo', echo.show);
 app.get('/users/:user_id/events', events.indexByUser);
 app.get('/users/:id', users.show);
