@@ -37,7 +37,8 @@ exports.create = function (req, res) {
     } else {
       redis.rpush(toId, JSON.stringify({
         message: req.body.message,
-        from: from
+        from: from,
+        created_at: (new Date()).toISOString()
       }));
     }
 
