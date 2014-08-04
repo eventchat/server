@@ -100,7 +100,8 @@ describe('Post API', function () {
           body: 'Just dark magic',
           event: event._id,
           author: user._id,
-          comments: [comment._id]
+          comments: [comment._id],
+          liked_by: [user._id]
         });
         post.save(function () {
           callback(null);
@@ -162,6 +163,14 @@ describe('Post API', function () {
               created_at: user._id.getTimestamp().toISOString()
             },
             created_at: comment._id.getTimestamp().toISOString()
+          }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
           }],
           created_at: post._id.getTimestamp().toISOString()
         })
@@ -234,6 +243,7 @@ describe('Post API', function () {
                   created_at: event._id.getTimestamp().toISOString()
                 },
                 comments: [],
+                liked_by: []
               });
             })
             .end(done);
@@ -349,6 +359,14 @@ describe('Post API', function () {
             },
             created_at: comment._id.getTimestamp().toISOString()
           }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          }],
           created_at: post._id.getTimestamp().toISOString()
         }])
         .end(done);
@@ -416,6 +434,14 @@ describe('Post API', function () {
               created_at: user._id.getTimestamp().toISOString()
             },
             created_at: comment._id.getTimestamp().toISOString()
+          }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
           }],
           created_at: post._id.getTimestamp().toISOString()
         }])
