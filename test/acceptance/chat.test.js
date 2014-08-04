@@ -117,7 +117,9 @@ describe('Chat API', function () {
               res.body.should.be.instanceof(Array);
               res.body.should.have.lengthOf(1);
               res.body[0].should.have.properties({
-                from: alice.toJSON()
+                to: bob.toJSON(),
+                from: alice.toJSON(),
+                message: 'hello'
               });
             })
             .end(callback);
@@ -152,7 +154,9 @@ describe('Chat API', function () {
                   res.body.should.be.instanceof(Array);
                   res.body.should.have.lengthOf(1);
                   res.body[0].should.have.properties({
-                    from: alice.toJSON()
+                    to: bob.toJSON(),
+                    from: alice.toJSON(),
+                    message: 'hello'
                   });
                 })
                 .end(callback);
