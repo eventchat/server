@@ -21,11 +21,12 @@ exports.create = function (req, res) {
     if (err || !user) {
       return res.send(404);
     }
-
+    var currentTime = (new Date()).toISOString();
     var message = {
       message: req.body.message,
       from: from,
-      created_at: (new Date()).toISOString()
+      to: user,
+      created_at: currentTime
     };
 
     // if the target user is connected,
@@ -38,7 +39,8 @@ exports.create = function (req, res) {
       redis.rpush(toId, JSON.stringify({
         message: req.body.message,
         from: from,
-        created_at: (new Date()).toISOString()
+        to: user,
+        created_at: currentTime
       }));
     }
 
