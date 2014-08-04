@@ -1,5 +1,6 @@
 /* globals describe, it, before, beforeEach, after */
 
+var async    = require('async');
 var mongoose = require('mongoose');
 var request  = require('supertest');
 var app      = require('../../app');
@@ -23,56 +24,90 @@ describe('Post API', function () {
   });
 
   beforeEach(function (done) {
-    // clear the database, then populate sample data
-    User.remove(function () {
-      Post.remove(function () {
-        Comment.remove(function () {
-          Event.remove(function () {
-            user = new User({
-              name: 'Joe',
-              email: 'joe@example.com',
-              info: 'This guy is lazy',
-              password: '123456'
-            });
-            user.save(function () {
-              user2 = new User({
-                name: 'Lyman',
-                email: 'lyman@example.com',
-                info: 'This guy is also lazy',
-                password: '123456'
-              });
-              user2.save(function () {
-                event = new Event({
-                  organizer: user._id,
-                  name: 'PyCon',
-                  description: 'Python Conference',
-                  location: [-122.0819, 37.3894],
-                  address: '777 W MiddleField Rd. Mountain View, CA, 94043'
-                });
-                event.save(function () {
-                  comment = new Comment({
-                    author: user._id,
-                    body: 'Awesome'
-                  });
-                  comment.save(function () {
-                    post = new Post({
-                      type: 'text',
-                      title: 'What\'s MetaClass',
-                      body: 'Just dark magic',
-                      event: event._id,
-                      author: user._id,
-                      comments: [comment._id]
-                    });
-                    post.save(done);
-                  });
-                });
-              });
-            });
-          });
+    async.series([
+      function (callback) {
+        User.remove(function () {
+          callback(null);
         });
-      });
-    });
-
+      },
+      function (callback) {
+        User.remove(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        Post.remove(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        Comment.remove(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        Event.remove(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        user = new User({
+          name: 'Joe',
+          email: 'joe@example.com',
+          info: 'This guy is lazy',
+          password: '123456'
+        });
+        user.save(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        user2 = new User({
+          name: 'Lyman',
+          email: 'lyman@example.com',
+          info: 'This guy is also lazy',
+          password: '123456'
+        });
+        user2.save(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        event = new Event({
+          organizer: user._id,
+          name: 'PyCon',
+          description: 'Python Conference',
+          location: [-122.0819, 37.3894],
+          address: '777 W MiddleField Rd. Mountain View, CA, 94043'
+        });
+        event.save(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        comment = new Comment({
+          author: user._id,
+          body: 'Awesome'
+        });
+        comment.save(function () {
+          callback(null);
+        });
+      },
+      function (callback) {
+        post = new Post({
+          type: 'text',
+          title: 'What\'s MetaClass',
+          body: 'Just dark magic',
+          event: event._id,
+          author: user._id,
+          comments: [comment._id],
+          liked_by: [user._id]
+        });
+        post.save(function () {
+          callback(null);
+        });
+      }
+    ], done);
   });
 
   after(function () {
@@ -128,6 +163,14 @@ describe('Post API', function () {
               created_at: user._id.getTimestamp().toISOString()
             },
             created_at: comment._id.getTimestamp().toISOString()
+          }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
           }],
           created_at: post._id.getTimestamp().toISOString()
         })
@@ -200,6 +243,7 @@ describe('Post API', function () {
                   created_at: event._id.getTimestamp().toISOString()
                 },
                 comments: [],
+                liked_by: []
               });
             })
             .end(done);
@@ -315,6 +359,14 @@ describe('Post API', function () {
             },
             created_at: comment._id.getTimestamp().toISOString()
           }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
+          }],
           created_at: post._id.getTimestamp().toISOString()
         }])
         .end(done);
@@ -382,6 +434,14 @@ describe('Post API', function () {
               created_at: user._id.getTimestamp().toISOString()
             },
             created_at: comment._id.getTimestamp().toISOString()
+          }],
+          liked_by: [{
+            id: String(user._id),
+            name: 'Joe',
+            email: 'joe@example.com',
+            info: 'This guy is lazy',
+            avatar_url: null,
+            created_at: user._id.getTimestamp().toISOString()
           }],
           created_at: post._id.getTimestamp().toISOString()
         }])

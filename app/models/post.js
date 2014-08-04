@@ -25,6 +25,10 @@ var PostSchema = new Schema({
   comments: [{
     type: Schema.Types.ObjectId,
     ref: 'Comment'
+  }],
+  liked_by: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }]
 });
 
@@ -37,6 +41,7 @@ PostSchema.methods.toJSON = function () {
     author: this.author.toJSON(),
     event: this.event.toJSON(),
     comments: this.comments.map(function (c) { return c.toJSON(); }),
+    liked_by: this.liked_by.map(function (u) { return u.toJSON(); }),
     created_at: this._id.getTimestamp().toISOString()
   };
 };

@@ -6,7 +6,7 @@ var User = require('../models/user');
 var Comment = require('../models/comment');
 
 function populatePost(post, callback) {
-  post.populate('author event comments', function (err) {
+  post.populate('author event comments liked_by', function (err) {
     // populate comments' authors
     async.each(post.comments, function (comment, done) {
       comment.populate('author', done);
