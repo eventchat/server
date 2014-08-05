@@ -39,6 +39,8 @@ app.get('/events/:id/attendees', events.indexAttendees);
 app.post('/events/:id/attendees', events.joinEvent);
 app.get('/events/:id', events.show);
 app.post('/events', events.create);
+app.post('/posts/:id/liked_by', posts.like);
+app.delete('/posts/:id/liked_by', posts.unlike);
 app.get('/posts/search', posts.search);
 app.get('/posts/:id', posts.show);
 app.post('/posts', posts.create);
