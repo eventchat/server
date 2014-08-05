@@ -156,3 +156,53 @@ exports.indexByUser = function (req, res) {
     });
   });
 };
+
+exports.like = function (req, res) {
+  var user = req.session.user;
+  if (!user) {
+    return res.send(401);
+  }
+
+  var pid = req.params.id;
+  Post.findByIdAndUpdate(pid, {
+    $addToSet: {
+      liked_by: user.id
+    }
+  }, function (err, post) {
+    if (!post) {
+      return res.send(404, {
+        message: 'Cannot find post with ID: ' + pid
+      });
+    } 
+    if (err) {
+      return res.send(400, {
+        message: err
+      });
+    }
+  });
+};
+
+exports.unlike = function (req, res) {
+  var user = req.session.user;
+  if (!user) {
+    return res.send(401);
+  }
+
+  var pid = req.params.id;
+  Post.findByIdAndUpdate(pid, {
+    $pull: {
+      liked_by: user.id
+    }
+  }, function (err, post) {
+    if (!post) {
+      return res.send(404, {
+        message: 'Cannot find post with ID: ' + pid
+      });
+    } 
+    if (err) {
+      return res.send(400, {
+        message: err
+      });
+    }
+  });
+};
