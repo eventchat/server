@@ -36,12 +36,7 @@ exports.create = function (req, res) {
       connections[toId].json([message]);
       delete connections[toId];
     } else {
-      redis.rpush(toId, JSON.stringify({
-        message: req.body.message,
-        from: from,
-        to: user,
-        created_at: currentTime
-      }));
+      redis.rpush(toId, JSON.stringify(message));
     }
 
     return res.send(200);
