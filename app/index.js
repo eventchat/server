@@ -5,6 +5,7 @@ var echo          = require('./controllers/echo');
 var users         = require('./controllers/users');
 var events        = require('./controllers/events');
 var posts         = require('./controllers/posts');
+var friendships   = require('./controllers/friendships');
 var chat          = require('./controllers/chat');
 var notifications = require('./controllers/notifications');
 var session       = require('./controllers/session');
@@ -32,6 +33,8 @@ app.get('/', function (req, res) {
   res.redirect('http://eventchat.github.io/homepage/');
 });
 app.post('/echo', echo.show);
+app.get('/users/:user_id/friends', friendships.index);
+app.post('/users/:user_id/friends', friendships.create);
 app.get('/users/:user_id/events', events.indexByUser);
 app.get('/users/:id', users.show);
 app.post('/users', users.create);
