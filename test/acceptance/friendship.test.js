@@ -78,11 +78,32 @@ describe('Friend API', function () {
   });
 
   describe('GET /users/:user_id/friends', function () {
-    it('should respond with the user\'s friends', function (done) {
+    it('should respond with an empty array when the user does not have friends', function (done) {
       agent
         .get('/users/' + user._id + '/friends')
         .expect(200)
         .expect([])
+        .end(done);
+    });
+
+    it('should respond with 200 when the user sends a friend request', function (done) {
+      agent
+        .post('/users/' + user2._id + '/friends')
+        .expect(200)
+        .end(done);
+    });
+
+    it('should send the target user a friend request notification', function (done) {
+      agent2
+        .get('/notifications')
+        .expect(200)
+        .expect(function (res) {
+          res.body.should.have.properties({
+            type: 'friend',
+            body: JSON.stringify(user),
+            is_read: false
+          });
+        })
         .end(done);
     });
   });
