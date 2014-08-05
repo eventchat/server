@@ -4,6 +4,7 @@ var async    = require('async');
 var mongoose = require('mongoose');
 var request  = require('supertest');
 var app      = require('../../app');
+var redis    = require('redis').createClient();
 var User     = require('../../app/models/user');
 var config   = require('../../config');
 
@@ -19,6 +20,11 @@ describe('Friend API', function () {
 
     // clear the database, then populate sample data
     async.series([
+      function (callback) {
+        redis.flushall(function () {
+          callback();
+        });
+      },
       function (callback) {
         User.remove(function () {
           callback();
