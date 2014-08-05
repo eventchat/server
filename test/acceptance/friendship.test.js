@@ -111,5 +111,45 @@ describe('Friend API', function () {
         })
         .end(done);
     });
+
+    it('should still return an empty array due to unconfirmed frienships', function (done) {
+      agent
+        .get('/users/' + user._id + '/friends')
+        .expect(200)
+        .expect([])
+        .end(done);
+    });
+
+    it('should be able to confirm friendships', function (done) {
+      agent2
+        .post('/users/' + user._id + '/friends')
+        .expect(200)
+        .end(done);
+    });
+
+    it('should be able to return confirmed friendships', function (done) {
+      async.parallel([
+        function (callback) {
+          agent
+            .get('/users/' + user._id + '/friends')
+            .expect(200)
+            .expect([
+              user2.toJSON()
+            ])
+            .end(callback);
+        },
+        function (callback) {
+          agent
+            .get('/users/' + user2._id + '/friends')
+            .expect(200)
+            .expect([
+              user.toJSON()
+            ])
+            .end(callback);
+        }
+      ], function (err) {
+        done(err);
+      });
+    });
   });
 });
