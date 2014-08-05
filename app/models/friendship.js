@@ -4,11 +4,17 @@ var Schema        = mongoose.Schema;
 var FriendshipSchema = new Schema({
   from: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   to: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
+  },
+  status: {
+    type: String, // 'pending' | 'confirmed'
+    required: true
   }
 });
 
