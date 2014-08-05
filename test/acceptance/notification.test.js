@@ -50,14 +50,16 @@ describe('Notification API', function () {
         function (callback) {
           setTimeout(function () {
             NotificationController.create(user._id, 'system', 'hello');
-          });
+            callback(null);
+          }, 500);
         },
         function (callback) {
           agent
             .get('/notifications')
             .expect(200)
             .expect(function (res) {
-              res.body.should.have.properties({
+              res.body.should.have.length(1);
+              res.body[0].should.have.properties({
                 type: 'system',
                 body: 'hello'
               });
