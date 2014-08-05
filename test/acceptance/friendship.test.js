@@ -14,11 +14,9 @@ describe('Friend API', function () {
   var agent;
   var agent2;
 
-  before(function () {
+  before(function (done) {
     mongoose.connect(config.DB_URL);
-  });
 
-  beforeEach(function (done) {
     // clear the database, then populate sample data
     async.series([
       function (callback) {
