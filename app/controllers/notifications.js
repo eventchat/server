@@ -7,49 +7,39 @@ if (url.auth) {
   redis.auth(url.auth.split(':')[1]);
 }
 
+var NOTIFICATION_REDIS_PREFIX = '__N__';
+
 // map from user id to connection
 var connections = {};
 
-exports.create = function (req, res) {
-  var from = req.session.user;
-  if (!from) {
-    return res.send(401);
+exports.create = function (userId, type, body) {
+  var toId = NOTIFICATION_REDIS_PREFIX + userId;
+
+  var message = {
+    type: type,
+    body: body,
+    is_read: false,
+    created_at: (new Date()).toISOString()
+  };
+
+  // if the target user is connected,
+  // then send the message to the user directly,
+  // else store the message in redis
+  if (connections[toId]) {
+    connections[toId].json([message]);
+    delete connections[toId];
+  } else {
+    redis.rpush(toId, JSON.stringify(message));
   }
-
-  var toId = req.body.to;
-  User.findById(toId, function (err, user) {
-    if (err || !user) {
-      return res.send(404);
-    }
-    var currentTime = (new Date()).toISOString();
-    var message = {
-      message: req.body.message,
-      from: from,
-      to: user,
-      created_at: currentTime
-    };
-
-    // if the target user is connected,
-    // then send the message to the user directly,
-    // else store the message in redis
-    if (connections[toId]) {
-      connections[toId].json([message]);
-      delete connections[toId];
-    } else {
-      redis.rpush(toId, JSON.stringify(message));
-    }
-
-    return res.send(200);
-  });
 };
 
-exports.show = function (req, res) {
+exports.index = function (req, res) {
   var user = req.session.user;
   if (!user) {
     return res.send(401);
   }
 
-  var id = user.id;
+  var id = NOTIFICATION_REDIS_PREFIX + user.id;
 
   // if there are unread messages,
   // then send them to the current user,
