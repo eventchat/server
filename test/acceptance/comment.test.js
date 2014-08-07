@@ -95,7 +95,7 @@ describe('Comment API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Lyman',
+          email: 'lyman@example.com',
           password: '123456'
         })
         .expect(200)
@@ -120,7 +120,7 @@ describe('Comment API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Lyman',
+          email: 'lyman@example.com',
           password: '123456'
         })
         .expect(200)
