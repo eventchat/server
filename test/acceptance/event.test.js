@@ -90,7 +90,7 @@ describe('Event API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
@@ -173,7 +173,7 @@ describe('Event API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
@@ -197,7 +197,7 @@ describe('Event API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
@@ -238,7 +238,7 @@ describe('Event API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
