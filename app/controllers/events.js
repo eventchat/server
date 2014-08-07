@@ -100,23 +100,22 @@ exports.joinEvent = function (req, res) {
     return res.send(401);
   }
 
-  Event.findById(id, function (err, event) {
-    if (err || !event) {
-      return res.send(404, {
-        message: 'Cannot find event with ID: ' + id
+  Event.findByIdAndUpdate(id, {
+    $addToSet: {
+      attendees: user.id
+    }
+  }, function (err, event) {
+    if (err) {
+      return res.send(500, {
+        message: err
       });
     }
-
-    event.attendees.push(user.id);
-    event.save(function (err) {
-      if (err) {
-        return res.send(400, {
-          message: err
-        });
-      }
-
-      res.send(200);
-    });
+    if (!event) {
+      return res.send(404, {
+        message: 'Unable to find event with ID: ' + id
+      });
+    }
+    res.send(200);
   });
 };
 
