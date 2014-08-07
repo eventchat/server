@@ -197,7 +197,7 @@ describe('Post API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email:'joe@example.com',
           password: '123456'
         })
         .end(function (err, res) {
@@ -265,7 +265,7 @@ describe('Post API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Lyman',
+          email:'lyman@example.com',
           password: '123456'
         })
         .expect(200)
@@ -287,7 +287,7 @@ describe('Post API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Lyman',
+          email: 'lyman@example.com',
           password: '123456'
         })
         .expect(200)

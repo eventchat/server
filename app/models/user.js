@@ -4,14 +4,14 @@ var Schema   = mongoose.Schema;
 
 
 var UserSchema = new Schema({
-  name: {
+  email: {
     type: String,
     required: true,
     index: {
       unique: true 
     }
   },
-  email: {
+  name: {
     type: String,
     required: true
   },
@@ -64,8 +64,8 @@ UserSchema.methods.comparePassword = function (password, callback) {
 UserSchema.methods.toJSON = function () {
   return {
     id: String(this._id),
-    name: this.name,
     email: this.email,
+    name: this.name,
     avatar_url: this.avatar_url || null,
     info: this.info || null,
     created_at: this._id.getTimestamp().toISOString()
