@@ -31,7 +31,7 @@ describe('Notification API', function () {
           agent
             .post('/session')
             .send({
-              name: 'Joe',
+              email: 'joe@example.com',
               password: '123456'
             })
             .end(done);

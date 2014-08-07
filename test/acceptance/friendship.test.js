@@ -57,7 +57,7 @@ describe('Friend API', function () {
         agent
           .post('/session')
           .send({
-            name: 'Joe',
+            email: 'joe@example.com',
             password: '123456'
           })
           .end(callback);
@@ -67,7 +67,7 @@ describe('Friend API', function () {
         agent2
           .post('/session')
           .send({
-            name: 'Lyman',
+            email: 'lyman@example.com',
             password: '123456'
           })
           .end(callback);
@@ -89,14 +89,18 @@ describe('Friend API', function () {
         .expect([])
         .end(done);
     });
+  });
 
+  describe('POST /users/:user_id/friends', function () {
     it('should respond with 200 when the user sends a friend request', function (done) {
       agent
         .post('/users/' + user2._id + '/friends')
         .expect(200)
         .end(done);
     });
+  });
 
+  describe('GET /notifications', function () {
     it('should send the target user a friend request notification', function (done) {
       agent2
         .get('/notifications')
@@ -111,7 +115,9 @@ describe('Friend API', function () {
         })
         .end(done);
     });
+  });
 
+  describe('GET /users/:user_id/friends', function () {
     it('should still return an empty array due to unconfirmed frienships', function (done) {
       agent
         .get('/users/' + user._id + '/friends')
@@ -119,14 +125,18 @@ describe('Friend API', function () {
         .expect([])
         .end(done);
     });
+  });
 
+  describe('POST /users/:user_id/friends', function () {
     it('should be able to confirm friendships', function (done) {
       agent2
         .post('/users/' + user._id + '/friends')
         .expect(200)
         .end(done);
     });
+  });
 
+  describe('GET /users/:user_id/friends', function () {
     it('should be able to return confirmed friendships', function (done) {
       async.parallel([
         function (callback) {
