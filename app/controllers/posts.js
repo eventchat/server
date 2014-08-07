@@ -156,3 +156,14 @@ exports.indexByUser = function (req, res) {
     });
   });
 };
+
+exports.indexByEvent = function (req, res) {
+  var id = req.params.id;
+  Post.find({ event: id }, function (err, posts) {
+    if (err) { res.send(500, { message: err }); }
+
+    async.map(posts, populatePost, function (err, posts) {
+      res.send(posts);
+    });
+  });
+};

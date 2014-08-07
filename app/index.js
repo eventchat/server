@@ -38,6 +38,7 @@ app.get('/events/search', events.search);
 app.get('/events/:id/attendees', events.indexAttendees);
 app.post('/events/:id/attendees', events.joinEvent);
 app.get('/events/:id', events.show);
+app.get('/events/:id/posts', posts.indexByEvent);
 app.post('/events', events.create);
 app.get('/posts/search', posts.search);
 app.get('/posts/:id', posts.show);
