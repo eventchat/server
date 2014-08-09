@@ -189,6 +189,7 @@ exports.like = function (req, res) {
         message: err
       });
     }
+    res.send(post);
   });
 };
 
@@ -214,5 +215,6 @@ exports.unlike = function (req, res) {
         message: err
       });
     }
+    res.send(post);
   });
 };
