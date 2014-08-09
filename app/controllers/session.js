@@ -1,7 +1,7 @@
 var User = require('../models/user');
 
 exports.create = function (req, res) {
-  User.findOne({ name: req.body.name }, function (err, user) {
+  User.findOne({ email: req.body.email }, function (err, user) {
     if (err || !user) {
       return res.send(404, {
         message: 'Cannot find user with name: ' + req.body.name

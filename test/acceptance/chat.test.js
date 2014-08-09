@@ -54,7 +54,7 @@ describe('Chat API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Alice',
+          email: 'alice@example.com',
           password: '123456'
         })
         .expect(200)
@@ -84,7 +84,7 @@ describe('Chat API', function () {
           aliceAgent
             .post('/session')
             .send({
-              name: 'Alice',
+              email: 'alice@example.com',
               password: '123456'
             })
             .expect(200)
@@ -104,7 +104,7 @@ describe('Chat API', function () {
           bobAgent
             .post('/session')
             .send({
-              name: 'Bob',
+              email:'bob@example.com',
               password: '123456'
             })
             .expect(200)
@@ -141,7 +141,7 @@ describe('Chat API', function () {
               bobAgent
                 .post('/session')
                 .send({
-                  name: 'Bob',
+                  email:'bob@example.com',
                   password: '123456'
                 })
                 .expect(200)
@@ -171,7 +171,7 @@ describe('Chat API', function () {
               aliceAgent
                 .post('/session')
                 .send({
-                  name: 'Alice',
+                  email:'alice@example.com',
                   password: '123456'
                 })
                 .expect(200)

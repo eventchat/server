@@ -37,7 +37,7 @@ describe('Session API', function () {
       request(app)
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
@@ -56,7 +56,7 @@ describe('Session API', function () {
       request(app)
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: 'wrongpass'
         })
         .expect(401)
@@ -81,7 +81,7 @@ describe('Session API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
@@ -108,7 +108,7 @@ describe('Session API', function () {
       agent
         .post('/session')
         .send({
-          name: 'Joe',
+          email: 'joe@example.com',
           password: '123456'
         })
         .expect(200)
